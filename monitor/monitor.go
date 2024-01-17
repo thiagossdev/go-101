@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 	"reflect"
 )
@@ -13,7 +14,7 @@ func main() {
 
 	switch command {
 	case 1:
-		fmt.Println("Monitoring...")
+		startMonitor()
 	case 2:
 		fmt.Println("Displaying logs...")
 	case 0:
@@ -46,4 +47,17 @@ func requestCommandInput() int {
 	fmt.Println()
 
 	return command
+}
+
+func startMonitor() {
+	fmt.Println("Monitoring...")
+	site := "https://app.revgas.com/api/health-check"
+	//site := "https://httpbin.org/status/404"
+	resp, _ := http.Get(site)
+
+	if resp.StatusCode == 200 {
+		fmt.Println("Site:", site, "has been loaded successfully!")
+	} else {
+		fmt.Println("Site:", site, "has problems. Status Code:", resp.StatusCode)
+	}
 }
