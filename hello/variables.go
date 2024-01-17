@@ -18,6 +18,16 @@ func main() {
 
 	var command int
 	fmt.Scanf("%d", &command)
-
 	fmt.Println("\nThe chose command was", command)
+	fmt.Println()
+
+	if command == 1 {
+		fmt.Println("Monitoring...")
+	} else if command == 2 {
+		fmt.Println("Displaying logs...")
+	} else if command == 0 {
+		fmt.Println("Exiting the program...")
+	} else {
+		fmt.Println("Undefined command!")
+	}
 }
