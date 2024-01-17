@@ -21,13 +21,14 @@ func main() {
 	fmt.Println("\nThe chose command was", command)
 	fmt.Println()
 
-	if command == 1 {
+	switch command {
+	case 1:
 		fmt.Println("Monitoring...")
-	} else if command == 2 {
+	case 2:
 		fmt.Println("Displaying logs...")
-	} else if command == 0 {
+	case 0:
 		fmt.Println("Exiting the program...")
-	} else {
+	default:
 		fmt.Println("Undefined command!")
 	}
 }
