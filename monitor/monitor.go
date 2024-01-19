@@ -5,24 +5,32 @@ import (
 	"net/http"
 	"os"
 	"reflect"
+	"time"
 )
+
+const monitoringTimes = 10
+const monitoring = 5
 
 func main() {
 	displayIntroduction()
-	displayMenu()
-	command := requestCommandInput()
 
-	switch command {
-	case 1:
-		startMonitor()
-	case 2:
-		fmt.Println("Displaying logs...")
-	case 0:
-		fmt.Println("Exiting the program...")
-		os.Exit(0)
-	default:
-		fmt.Println("Undefined command!")
-		os.Exit(-1)
+	for {
+		displayMenu()
+		command := requestCommandInput()
+
+		switch command {
+		case 1:
+			startMonitor()
+		case 2:
+			fmt.Println("Displaying logs...")
+			fmt.Println()
+		case 0:
+			fmt.Println("Exiting the program...")
+			os.Exit(0)
+		default:
+			fmt.Println("Undefined command!")
+			os.Exit(-1)
+		}
 	}
 }
 
@@ -51,13 +59,23 @@ func requestCommandInput() int {
 
 func startMonitor() {
 	fmt.Println("Monitoring...")
-	site := "https://app.revgas.com/api/health-check"
-	//site := "https://httpbin.org/status/404"
-	resp, _ := http.Get(site)
+	sites := []string{"https://app.revgas.com/api/health-check", "https://random-status-code.herokuapp.com",
+		"https://httpbin.org/status/500", "https://httpbin.org/status/201"}
 
-	if resp.StatusCode == 200 {
-		fmt.Println("Site:", site, "has been loaded successfully!")
-	} else {
-		fmt.Println("Site:", site, "has problems. Status Code:", resp.StatusCode)
+	for i := 0; i < monitoringTimes; i++ {
+		fmt.Println("Run ", i+1)
+		for _, site := range sites {
+			resp, _ := http.Get(site)
+
+			if resp.StatusCode == 200 {
+				fmt.Println("Site:", site, "has been loaded successfully!")
+			} else {
+				fmt.Println("Site:", site, "has problems. Status Code:", resp.StatusCode)
+			}
+		}
+		time.Sleep(monitoring * time.Second)
+		fmt.Println()
 	}
+
+	fmt.Println()
 }
